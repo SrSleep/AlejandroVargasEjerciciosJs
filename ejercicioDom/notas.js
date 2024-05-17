@@ -41,14 +41,21 @@ changeswitch.addEventListener(`change`, function (evento) {
         if (arraycambiado.length == 0) {
             notasDiv.innerHTML = `<p>NO HAY NOTAS PARA MOSTRAR </p>`
         } else {
-            if(inputBuscar.length != 0){
-                arraycambiado=filtrarTexto(arraycambiado,inputBuscar.value)
+            if (inputBuscar.length != 0) {
+                arraycambiado = filtrarTexto(arraycambiado, inputBuscar.value)
+                pintarNotas(notasDiv, arraycambiado);
+            } else {
                 pintarNotas(notasDiv, arraycambiado);
             }
-            pintarNotas(notasDiv, arraycambiado);
         }
     } else {
-        pintarNotas(notasDiv, arrayNotas);
+        
+        if (inputBuscar.length != 0) {
+            arraycambiado = filtrarTexto(arrayNotas, inputBuscar.value)
+            pintarNotas(notasDiv, arraycambiado);
+        } else {
+            pintarNotas(notasDiv, arrayNotas);
+        }
     }
 
 })
@@ -57,13 +64,10 @@ inputBuscar.addEventListener(`input`, function (evento) {
     let arrayTexto = filtrarTexto(arrayNotas, inputBuscar.value);
     if (changeswitch.checked) {
         arrayTexto = filtrarRealizadas(arrayTexto);
-        pintarNotas(notasDiv,arrayTexto)
-    }else{
-        pintarNotas(notasDiv,arrayTexto)
+        pintarNotas(notasDiv, arrayTexto)
+    } else {
+        pintarNotas(notasDiv, arrayTexto)
     }
-
-
-
 })
 
 guardarBoton.addEventListener(`click`, function (evento) {
@@ -82,6 +86,34 @@ resetBoton.addEventListener(`click`, function (evento) {
     limpiarInput();
 });
 
+function marcaRealizada(id) {
+    for (let i = 0; i < arrayNotas.length; i++) {
+        if (arrayNotas[i].id === id) {
+            if (arrayNotas[i].realizada) {
+                arrayNotas[i].realizada = false;
+            } else {
+                arrayNotas[i].realizada = true;
+            }
+        }
+    }
+    
+
+
+    let arrayCambiado = filtrarRealizadas(arrayNotas);
+
+    if (changeswitch.checked) {
+        if (arrayCambiado.length == 0) {
+            notasDiv.innerHTML = `<p>NO HAY NOTAS PARA MOSTRAR </p>`
+        } else {
+            arrayCambiado = filtrarTexto(arrayCambiado, inputBuscar.value)
+            pintarNotas(notasDiv, arrayCambiado);
+        }
+    } else {
+        arrayCambiado = filtrarTexto(arrayNotas, inputBuscar.value)
+        pintarNotas(notasDiv, arrayCambiado);
+    }
+
+}
 
 
 function eliminarNota(id) {
@@ -147,30 +179,6 @@ function crearNota(ubicacion, laNota) {
     ubicacion.appendChild(nuevaNota);
 
 };
-
-function marcaRealizada(id) {
-    for (let i = 0; i < arrayNotas.length; i++) {
-        if (arrayNotas[i].id === id) {
-            if (arrayNotas[i].realizada) {
-                arrayNotas[i].realizada = false;
-            } else {
-                arrayNotas[i].realizada = true;
-            }
-        }
-    }
-    let arraycambiado = filtrarRealizadas(arrayNotas);
-    if (changeswitch.checked) {
-        if (arraycambiado.length == 0) {
-            notasDiv.innerHTML = `<p>NO HAY NOTAS PARA MOSTRAR </p>`
-        } else {
-            pintarNotas(notasDiv, arraycambiado);
-        }
-    } else {
-        pintarNotas(notasDiv, arrayNotas);
-    }
-
-}
-
 
 function filtrarRealizadas(lasNotas) {
 
